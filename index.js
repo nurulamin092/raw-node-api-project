@@ -21,8 +21,15 @@ const app ={};
 //     console.log(`error was`,err);
 // });
 
-data.read('test','newFile',(err,data)=>{
-    console.log(data,err);
+// data read
+// data.read('test','newFile',(err,data)=>{
+//     console.log(data,err);
+// })
+
+// data update
+
+data.update('test','newFile',{name:"Lakshmipur",language:"Noakhali"},(err)=>{
+    console.log(err);
 })
 
 //configuration
