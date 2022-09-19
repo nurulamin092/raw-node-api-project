@@ -10,13 +10,21 @@
 const http = require('http');
 const environment = require('./helpers/environments');
 const {handleReqRes}  = require('./helpers/handleReqRes');
+const data = require('./lib/data');
 //App object - module scaffolding
 const app ={};
 
+//testing file
+//pore muse di
+
+data.create('test','newFile',{name:'Bangladesh',language:'Bengali'},(err)=>{
+    console.log(`error was`,err);
+})
+
 //configuration
-app.config ={
+// app.config ={
    
-};
+// };
 
 // create server
 app.createServer = ()=>{
