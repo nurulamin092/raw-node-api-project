@@ -17,8 +17,12 @@ const app ={};
 //testing file
 //pore muse di
 
-data.create('test','newFile',{name:'Bangladesh',language:'Bengali'},(err)=>{
-    console.log(`error was`,err);
+// data.create('test','newFile',{name:'Bangladesh',language:'Bengali'},(err)=>{
+//     console.log(`error was`,err);
+// });
+
+data.read('test','newFile',(err,data)=>{
+    console.log(data,err);
 })
 
 //configuration
