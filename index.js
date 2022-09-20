@@ -28,10 +28,14 @@ const app ={};
 
 // data update
 
-data.update('test','newFile',{name:"Lakshmipur",language:"Noakhali"},(err)=>{
-    console.log(err);
-})
+// data.update('test','newFile',{name:"Lakshmipur",language:"Noakhali"},(err)=>{
+//     console.log(err);
+// })
 
+// file delete
+// data.delete('test','newFile',(err)=>{
+//     console.log(err);
+// })
 //configuration
 // app.config ={
    

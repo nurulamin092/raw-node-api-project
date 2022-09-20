@@ -4,9 +4,12 @@
  * Author : Nurul Amin 
  * Date 17-09-22
  */
-const {sampleHandler }= require('./handlers/routeHandlers/sampleHandler')
+const {sampleHandler }= require('./handlers/routeHandlers/sampleHandler');
+const {userHandler }= require('./handlers/routeHandlers/ userHandler');
+
 const routes ={
-    'sample': sampleHandler,
+    sample: sampleHandler,
+    user:userHandler
    
 };
 
