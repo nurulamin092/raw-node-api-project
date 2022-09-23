@@ -21,6 +21,7 @@ handler.handleReqRes =(req,res)=>{
     const path = parseUrl.pathname;
     const trimmedPath = path.replace(/^\/+|\/+$/g, '');
     const method = req.method.toLowerCase();
+    const queryStringObject = parseUrl.query;
     const headersObject = req.headers;
 
     const requestProperties = {
@@ -28,6 +29,7 @@ handler.handleReqRes =(req,res)=>{
         path,
         trimmedPath,
         method,
+        queryStringObject, 
         headersObject
     };
 
@@ -55,8 +57,8 @@ handler.handleReqRes =(req,res)=>{
             res.end(payloadString);
     
         });
-        res.end('Hello programmer How are your?');
+        // res.end('Hello programmer How are your?');
     }); 
-} ;
+} 
 
 module.exports = handler;
