@@ -133,6 +133,7 @@ const phone =
          }
 }
 
+// put request
 handler._users.put = (requestProperties, callback) => {
     // check the phone number if valid
     const phone =
@@ -147,11 +148,12 @@ handler._users.put = (requestProperties, callback) => {
             ? requestProperties.body.firstName
             : false;
 
-    const lastName =
+  const lastName =
         typeof requestProperties.body.lastName === 'string' &&
         requestProperties.body.lastName.trim().length > 0
-            ? requestProperties.body.lastName
-            : false;
+                ? requestProperties.body.lastName
+                : false;
+            
 
     const password =
         typeof requestProperties.body.password === 'string' &&
@@ -170,7 +172,7 @@ handler._users.put = (requestProperties, callback) => {
                         userData.firstName = firstName;
                     }
                     if (lastName) {
-                        userData.firstName = firstName;
+                        userData.lastName = lastName;
                     }
                     if (password) {
                         userData.password = hash(password);
@@ -205,6 +207,7 @@ handler._users.put = (requestProperties, callback) => {
         });
     }
 };
+
 handler._users.delete=(requestProperties,callback)=>{
     
     const phone = 
