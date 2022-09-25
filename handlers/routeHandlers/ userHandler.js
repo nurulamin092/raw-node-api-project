@@ -32,20 +32,17 @@ handler._users.post =(requestProperties,callback)=>{
         ? requestProperties.body.firstName
         : false;
 
-
 const lastName =
 typeof requestProperties.body.lastName === 'string' &&
 requestProperties.body.lastName.trim().length > 0
     ? requestProperties.body.lastName
     : false;
 
-
-    const phone =
+const phone =
     typeof requestProperties.body.phone === 'string' &&
     requestProperties.body.phone.trim().length === 11
         ? requestProperties.body.phone
         : false;
-
 
 const password = 
     typeof requestProperties.body.password === 'string' &&

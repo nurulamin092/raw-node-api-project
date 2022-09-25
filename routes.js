@@ -4,13 +4,16 @@
  * Author : Nurul Amin 
  * Date 17-09-22
  */
-const {sampleHandler }= require('./handlers/routeHandlers/sampleHandler');
-const {userHandler }= require('./handlers/routeHandlers/ userHandler');
 
-const routes ={
+// dependencies
+const {sampleHandler} = require('./handlers/routeHandlers/sampleHandler');
+const {userHandler} = require ('./handlers/routeHandlers/ userHandler');
+const {tokenHandler} = require ('./handlers/routeHandlers/tokenHandler');
+
+const routes = {
     sample: sampleHandler,
-    user:userHandler
-   
+    user: userHandler,
+    token: tokenHandler,
 };
 
 module.exports = routes;
