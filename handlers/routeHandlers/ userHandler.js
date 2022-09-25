@@ -96,13 +96,12 @@ const tosAgreement =
 
 }
 
-
 handler._users.get= (requestProperties,callback)=>{
 //check the phone number is valid
 
 const phone =   
-    typeof requestProperties.queryStringObject.phone=== 'string' && requestProperties
-        .queryStringObject.phone.trim().length ===11 ?
+    typeof requestProperties.queryStringObject.phone === 'string' && requestProperties
+        .queryStringObject.phone.trim().length === 11 ?
          requestProperties.queryStringObject.phone :
          false;
 
@@ -115,7 +114,6 @@ const phone =
 
                     if (tokenId) {
                         data.read('users',phone,(err,u)=>{
-
                             const user = {...parseJSON(u)}
             
                             if (!err&&user) {
@@ -125,23 +123,21 @@ const phone =
                             else{
                                 callback(404,{
                                     error:'Requested url was not found'
-                                })
-                            }
-            
-                        }) 
+                                });
+                            }            
+                        }); 
                     } else {
                         callback (404,{
                             error:'Authentication failure ... 1 !'
                         });
                     }
-
                   });
                   
          }
          else{
             callback(404,{
                 error:'Requested url was not found'
-            })
+            });
          }
 }
 
@@ -175,39 +171,53 @@ handler._users.put = (requestProperties, callback) => {
 
     if (phone) {
         if (firstName || lastName || password) {
-            // loopkup the user
-            data.read('users', phone, (err1, uData) => {
-                const userData = { ...parseJSON(uData) };
 
-                if (!err1 && userData) {
-                    if (firstName) {
-                        userData.firstName = firstName;
-                    }
-                    if (lastName) {
-                        userData.lastName = lastName;
-                    }
-                    if (password) {
-                        userData.password = hash(password);
-                    }
+            const token = typeof (requestProperties.headersObject.token) === 'string' ?
+            requestProperties.headersObject.token : false;
 
-                    // store to database
-                    data.update('users', phone, userData, (err2) => {
-                        if (!err2) {
-                            callback(200, {
-                                message: 'User was updated successfully!',
-                            });
-                        } else {
-                            callback(500, {
-                                error: 'There was a problem in the server side!',
-                            });
+            tokenHandler._token.verify(token,phone,(tokenId)=>{
+
+              if (tokenId) {
+                data.read('users', phone, (err1, uData) => {
+                    const userData = { ...parseJSON(uData) };
+    
+                    if (!err1 && userData) {
+                        if (firstName) {
+                            userData.firstName = firstName;
                         }
-                    });
-                } else {
-                    callback(400, {
-                        error: 'You have a problem in your request!',
-                    });
-                }
+                        if (lastName) {
+                            userData.lastName = lastName;
+                        }
+                        if (password) {
+                            userData.password = hash(password);
+                        }
+    
+                        // store to database
+                        data.update('users', phone, userData, (err2) => {
+                            if (!err2) {
+                                callback(200, {
+                                    message: 'User was updated successfully!',
+                                });
+                            } else {
+                                callback(500, {
+                                    error: 'There was a problem in the server side!',
+                                });
+                            }
+                        });
+                    } else {
+                        callback(400, {
+                            error: 'You have a problem in your request!',
+                        });
+                    }
+                }); 
+              } else {
+                  callback (404,{
+                      error:'Authentication failure ... 1 !'
+                  });
+              }
             });
+            // loopkup the user
+        
         } else {
             callback(400, {
                 error: 'You have a problem in your request!',
