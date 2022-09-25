@@ -8,7 +8,8 @@
 //dependencies
 
 const data = require('../../lib/data');
-const{hash, parseJSON} = require('../../helpers/utilities')
+const{hash, parseJSON} = require('../../helpers/utilities');
+const tokenHandler = require('./tokenHandler');
 
 const handler ={};
 
@@ -106,22 +107,36 @@ const phone =
          false;
 
          if (phone) {
+
+            const token = typeof (requestProperties.headersObject.token) === 'string' ?
+                  requestProperties.headersObject.token : false;
+
+                  tokenHandler._token.verify(token,phone,(tokenId)=>{
+
+                    if (tokenId) {
+                        data.read('users',phone,(err,u)=>{
+
+                            const user = {...parseJSON(u)}
             
-            data.read('users',phone,(err,u)=>{
+                            if (!err&&user) {
+                                delete user.password;
+                                callback(200,user)
+                            }
+                            else{
+                                callback(404,{
+                                    error:'Requested url was not found'
+                                })
+                            }
+            
+                        }) 
+                    } else {
+                        callback (404,{
+                            error:'Authentication failure ... 1 !'
+                        });
+                    }
 
-                const user = {...parseJSON(u)}
-
-                if (!err&&user) {
-                    delete user.password;
-                    callback(200,user)
-                }
-                else{
-                    callback(404,{
-                        error:'Requested url was not found'
-                    })
-                }
-
-            })
+                  });
+                  
          }
          else{
             callback(404,{
