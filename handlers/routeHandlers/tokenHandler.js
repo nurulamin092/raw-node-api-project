@@ -40,8 +40,8 @@ handler._token.post = (requestProperties, callback) => {
             : false;
     if (phone && password) {
         data.read('users', phone, (err1, userData) => {
-            const hashedpassword = hash(password);
-            if (hashedpassword === parseJSON(userData).password) {
+            const hashedPassword = hash(password);
+            if (hashedPassword === parseJSON(userData).password) {
                 const tokenId = createRandomString(20);
                 const expires = Date.now() + 60 * 60 * 1000;
                 const tokenObject = {
@@ -75,15 +75,72 @@ handler._token.post = (requestProperties, callback) => {
 
 
 handler._token.get= (requestProperties,callback)=>{
-//check the phone number is valid
+//check the id  is valid
 
+const id = 
+typeof requestProperties.queryStringObject.id == 'string' &&
+requestProperties.queryStringObject.id .trim().length ===20 ?
+requestProperties.queryStringObject.id : false;
+
+    if (id) {
+        //look up the token
+        data.read('tokens',id,(err,tokenData)=>{
+            const token = {...parseJSON(tokenData)};
+            if (!err && token) {
+                callback(200,token)
+            } else {
+                callback (404,{
+                    error:'Request token was not found'
+                });
+            }
+        });
+    
+    } else {
+        callback (404,{
+            error:'Request token was not found'
+        });
+    } 
 
 }
 
 // put request
 handler._token.put = (requestProperties, callback) => {
-    // check the phone number if valid
-   
+    //
+
+    const id = typeof requestProperties.body.id === 'string' && 
+            requestProperties.body.id.trim().length === 20 ? 
+            requestProperties.body.id : false;
+
+    const extend = 
+    typeof requestProperties.body.extend === 'boolean' && 
+    requestProperties.body.extend === true ? true : false;
+
+    if (id && extend) {
+        data.read('tokens',id,(err1,tokenData)=>{
+            let tokenObject = parseJSON(tokenData)
+            if (tokenObject.expires > Date.now()) {
+                 tokenObject.expires = Date.now() + 60 * 60 *1000;
+                 // store the updated token
+                 data.update('tokens',id,tokenObject,(err2)=>{
+                    if (!err2) {
+                        callback(200)
+                    } else {
+                        callback (500,{
+                            error:'There was a server side error...2 !',
+                        })
+                    }
+                 });
+            } else {
+                callback (400,{
+                    error:'Token already expired..! '
+                });
+            }
+        });
+    } else {
+        callback (400,{
+            error:'There was a problem in your request...'
+        })
+    }            
 };
 
 handler._token.delete=(requestProperties,callback)=>{
