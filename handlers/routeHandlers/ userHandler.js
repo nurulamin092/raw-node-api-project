@@ -209,7 +209,7 @@ handler._users.put = (requestProperties, callback) => {
                             error: 'You have a problem in your request!',
                         });
                     }
-                }); 
+                });
               } else {
                   callback (404,{
                       error:'Authentication failure ... 1 !'
@@ -239,28 +239,42 @@ handler._users.delete=(requestProperties,callback)=>{
 
 
         if (phone) {
+            
+            const token = typeof (requestProperties.headersObject.token) === 'string' ?
+                  requestProperties.headersObject.token : false;
 
-            data.read('users',phone,(err1,userData)=>{
-                if (!err1&&userData) {
-                    data.delete('users',phone,(err2)=>{
-                        if (!err2) {
-                            callback(200,{
-                                message:'User was successfully deleted!'
-                            });
-                        }
-                        else{
-                            callback(500,{
-                                error:'There was a server side error!.'
-                            });
-                        }
-                    })
-                }
-                else{
-                    callback(500,{
-                        error:'There was a server side error!.'
-                    })
-                }
-            })
+                  tokenHandler._token.verify(token,phone,(tokenId)=>{
+
+                    if (tokenId) {
+                        data.read('users',phone,(err1,userData)=>{
+                            if (!err1&&userData) {
+                                data.delete('users',phone,(err2)=>{
+                                    if (!err2) {
+                                        callback(200,{
+                                            message:'User was successfully deleted!'
+                                        });
+                                    }
+                                    else{
+                                        callback(500,{
+                                            error:'There was a server side error!.'
+                                        });
+                                    }
+                                })
+                            }
+                            else{
+                                callback(500,{
+                                    error:'There was a server side error!.'
+                                })
+                            }
+                        }); 
+                    } else {
+                        callback (404,{
+                            error:'Authentication failure ... 1 !'
+                        });
+                    }
+                  });
+
+        
             
         }
         else{
