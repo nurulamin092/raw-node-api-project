@@ -50,9 +50,7 @@ handler._check.post =(requestProperties,callback)=>{
       
       if (protocol && url && method && successCodes && timeoutSeconds) {
 
-        const token = typeof requestProperties.headersObject.token === 'string' ?
-              requestProperties.headersObject.token : false;
-
+         
         //lookup the user phone by reading the token
         data.read('tokens',token,(err1,tokenData) => {
 
@@ -132,7 +130,6 @@ handler._check.post =(requestProperties,callback)=>{
                     error: 'Authentication problem .... 3'
                 })
             }
-
         })
         
       } else {
@@ -141,11 +138,48 @@ handler._check.post =(requestProperties,callback)=>{
             error: ' Your have a problem in your request ...!'
         })
       }
-    
+  
 }
 
 handler._check.get= (requestProperties,callback)=>{
 //check the phone number is valid
+
+const id = 
+typeof requestProperties.queryStringObject.id == 'string' &&
+requestProperties.queryStringObject.id .trim().length ===20 ?
+requestProperties.queryStringObject.id : false;
+ 
+if (id) {
+    // lookup the check
+    data.read('checks',id,(err1,checkData)=> {
+        if (!err1 && checkData) {
+            const token = 
+                  typeof requestProperties.headersObject.token === 'string' ?
+                  requestProperties.headersObject.token : false;
+
+            tokenHandler._token.verify(token,parseJSON(checkData).userPhone,(tokenIsValid) => { 
+                if (tokenIsValid) {
+                    callback (200,parseJSON(checkData))
+                } else {
+
+                    callback (403,{
+                        error: 'Authentication failure!'
+                    });
+                }
+            });
+
+        } else {
+            callback (500,{
+                error: 'You have a problem in your request ...2'
+            })
+        }
+
+    });
+} else {
+    callback (400,{
+        error: ' Your have a problem in your request ...1!'
+    })
+}
 
 
 }
