@@ -10,10 +10,21 @@
 const http = require('http');
 const environment = require('./helpers/environments');
 const {handleReqRes}  = require('./helpers/handleReqRes');
+const { sendTwilioSms } = require('./helpers/notifications');
 const data = require('./lib/data');
 //App object - module scaffolding
 const app ={};
 
+
+sendTwilioSms ('01916252884','Hello world',(err)=>{
+    console.log(`This is the error`,err);
+});
+
+// configuration
+
+app.config = {
+    port: 3000
+}
 //testing file
 //pore muse di
 

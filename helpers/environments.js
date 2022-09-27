@@ -15,7 +15,13 @@ environments.staging = {
     port:3000,
     evnName :'staging',
     secretKey:'hdnskmkdskdsj',
-    maxChecks : 5,
+    maxChecks : 5, 
+    twilio: {
+        fromPhone: '+15005550006',
+        accountSid : 'AC0e344d3bbbcfe2fd6a9735999ba751f9',
+        authToken : 'f17667671b547086719a27ba5ca3947f'
+
+    }
 }
 
 environments.production ={
@@ -23,6 +29,11 @@ environments.production ={
     evnName:'production',
     secretKey:'udhruherherjwe',
     maxCheck : 5,
+    twilio: {
+        fromPhone: '+15005550006',
+        accountSid : 'AC0e344d3bbbcfe2fd6a9735999ba751f9',
+        authToken : 'f17667671b547086719a27ba5ca3947f'
+    }
 }
 
 // determined which environment is passed
